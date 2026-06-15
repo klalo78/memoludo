@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Juego de Memoria - Desafío de las Copas</title>
+    <!-- Librería de íconos para WhatsApp -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -35,8 +36,8 @@
         }
 
         @keyframes pulsoValidar {
-            0%, 100% { transform: scale(1); box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4); background-color: #3498db; }
-            50% { transform: scale(1.05); box-shadow: 0 8px 25px rgba(52, 152, 219, 0.8); background-color: #2980b9; }
+            0%, 100% { transform: scale(1); box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4); background-color: #2ecc71; }
+            50% { transform: scale(1.05); box-shadow: 0 8px 25px rgba(52, 152, 219, 0.8); background-color: #27ae60; }
         }
 
         /* COMPONENTES GENERALES */
@@ -103,7 +104,6 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
-        /* CONTENEDORES PARA RENDERIZAR LAS COPAS EN LAS PANTALLAS */
         .contenedor-copas-pantalla {
             display: flex;
             justify-content: center;
@@ -171,37 +171,58 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            width: 340px;
+            width: 360px;
             margin-bottom: 15px;
-            gap: 8px;
+            gap: 10px;
         }
 
         .logo-contenedor-copas {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 15px;
-            position: relative;
+            justify-content: space-between;
+            width: 100%;
+            padding: 0 5px;
+            box-sizing: border-box;
         }
 
         .logo-contenedor img {
-            max-width: 120px;
+            max-width: 110px;
             height: auto;
             animation: moviLogo 4s ease-in-out infinite; 
         }
 
-        /* COPAS CHIQUITAS ARRIBA AL LADO DEL LOGO */
-        .mini-copas-header {
+        /* NUEVO CONTENEDOR BLANCO ESTÉTICO PARA LAS 4 COPITAS */
+        .vitrina-copas-header {
+            background-color: #ffffff;
+            border: 2px solid #74acdf;
+            border-radius: 12px;
+            padding: 4px 10px;
             display: flex;
-            gap: 4px;
             align-items: center;
-            min-height: 35px;
+            justify-content: center;
+            gap: 6px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            min-width: 140px;
+            height: 40px;
+            box-sizing: border-box;
         }
 
-        .mini-copas-header img {
-            max-width: 30px;
+        .vitrina-copas-header img {
+            width: 24px;
             height: auto;
-            filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.4));
+            transition: all 0.3s ease;
+        }
+
+        /* Clase para las copas que todavía no se ganaron (apagadas) */
+        .copa-bloqueada {
+            opacity: 0.25;
+            filter: grayscale(100%);
+        }
+
+        /* Clase para las copas ganadas (activas y brillantes) */
+        .copa-activa {
+            opacity: 1 !important;
+            filter: grayscale(0%) drop-shadow(0px 2px 4px rgba(0,0,0,0.3)) !important;
         }
 
         .temporizador {
@@ -263,21 +284,23 @@
 </head>
 <body>
 
+    <!-- 1. PANTALLA PRINCIPAL: PEDIR CÓDIGO -->
     <div id="pantalla-entrada" class="pantalla-completa">
         <div class="logo-grande">
             <img src="logo.png" alt="Logo">
         </div>
         
         <div class="contenedor-blanco-patrio" id="bloque-validacion-inicial">
-            <h2 style="font-size: 1.6rem; margin-top: 0; color: #2c3e50;">Validaci&oacute;n de Acceso</h2>
-            <p style="font-size: 1.1rem; margin-bottom: 15px; text-align: center;">Ingres&aacute; el c&oacute;digo del d&iacute;a para comenzar el desaf&iacute;o:</p>
+            <h2 style="font-size: 1.6rem; margin-top: 0; color: #2c3e50;">Validacion de Acceso</h2>
+            <p style="font-size: 1.1rem; margin-bottom: 15px; text-align: center;">Ingresa el codigo del dia para comenzar el desafio:</p>
             
-            <input type="text" id="input-pass" class="input-codigo" placeholder="Ingres&aacute; el c&oacute;digo aqu&iacute;" maxlength="25" autocomplete="off">
+            <input type="text" id="input-pass" class="input-codigo" placeholder="Ingresa el codigo aqui" maxlength="25" autocomplete="off">
             <div id="error-message" class="error-validacion"></div>
             
             <button class="btn-general" style="margin-bottom: 0; font-size: 1.3rem; padding: 10px 35px;" onclick="validarCodigoDinamico()">VALIDAR</button>
         </div>
 
+        <!-- Botón JUGAR oculto por defecto -->
         <button id="btn-jugar-oculto" class="btn-general" style="display: none; animation: pulsoValidar 1.5s infinite ease-in-out;" onclick="comenzarExperiencia()">JUGAR</button>
 
         <a class="bloque-contacto" href="https://wa.me/541149496902" target="_blank" rel="noopener noreferrer">
@@ -286,10 +309,12 @@
         </a>
     </div>
 
+    <!-- 2. PANTALLA INTERMEDIA DE PROGRESO (CUANDO GANA UN NIVEL) -->
     <div id="pantalla-progreso" class="pantalla-completa" style="display: none;">
         <div class="contenedor-blanco-patrio">
-            <h2 id="titulo-progreso" style="font-size: 1.8rem; color: #2ecc71; margin-top: 0; line-height: 1.3;">&iexcl;Excelente!</h2>
+            <h2 style="font-size: 1.8rem; color: #2ecc71; margin-top: 0; line-height: 1.3;">Excelente!</h2>
             
+            <!-- Contenedor de copas grandes conseguidas -->
             <div id="copas-pantalla-intermedia" class="contenedor-copas-pantalla"></div>
 
             <p id="mensaje-progreso" style="font-size: 1.3rem; color: #34495e; margin-bottom: 25px; font-weight: bold; line-height: 1.4;"></p>
@@ -298,25 +323,35 @@
         </div>
     </div>
 
+    <!-- 3. PANTALLA VICTORIA FINAL (CUANDO GANA LA CUARTA) -->
     <div id="pantalla-victoria-final" class="pantalla-completa" style="display: none;">
         <div class="contenedor-blanco-patrio">
-            <h2 style="font-size: 1.9rem; color: #2ecc71; margin-top: 0; font-weight: bold; line-height: 1.2;">&iexcl;Felicidades ganaste la cuarta!!</h2>
+            <h2 style="font-size: 1.9rem; color: #2ecc71; margin-top: 0; font-weight: bold; line-height: 1.2;">Felicidades ganaste la cuarta!!</h2>
             
+            <!-- Muestra las 4 copas grandes -->
             <div id="copas-pantalla-final" class="contenedor-copas-pantalla"></div>
 
-            <img src="messi.jpg" class="imagen-messi" alt="Messi Campeón">
+            <img src="messi.jpg" class="imagen-messi" alt="Messi Campeon">
             
             <button class="btn-general" style="background-color: #3498db; margin-bottom: 0;" onclick="reiniciarTodoElJuego()">VOLVER AL INICIO</button>
         </div>
     </div>
 
+    <!-- 4. INTERFAZ DEL TABLERO DE JUEGO -->
     <div id="zona-juego">
         <div class="header-juego">
             <div class="logo-contenedor-copas">
                 <div class="logo-contenedor">
                     <img src="logo.png" alt="Logo Animado">
                 </div>
-                <div id="mini-copas-header" class="mini-copas-header"></div>
+                
+                <!-- NUEVO: Contenedor físico blanco para albergar las 4 copitas fijas -->
+                <div class="vitrina-copas-header">
+                    <img id="header-copa-1" src="copa.png" class="copa-bloqueada" alt="Copa 1">
+                    <img id="header-copa-2" src="copa.png" class="copa-bloqueada" alt="Copa 2">
+                    <img id="header-copa-3" src="copa.png" class="copa-bloqueada" alt="Copa 3">
+                    <img id="header-copa-4" src="copa.png" class="copa-bloqueada" alt="Copa 4">
+                </div>
             </div>
             <div style="color: #fff; font-weight: bold; font-size: 1.2rem;" id="indicador-copa">Copa: 1 / 4</div>
             <div class="temporizador" id="reloj">00:45</div>
@@ -326,7 +361,7 @@
 
         <div id="pantalla-derrota">
             <h2>Perdiste</h2>
-            <p>&iquest;Intentamos de nuevo este nivel?</p>
+            <p>Intentamos de nuevo este nivel?</p>
             <button class="btn-general" onclick="reiniciarNivelActual()">Volver a intentar</button>
         </div>
     </div>
@@ -338,11 +373,12 @@
             '13.jpg', '14.jpg', '15.jpg'
         ];
 
+        // Mensajes limpios de caracteres especiales para evitar conflictos de rombos en JS
         const configuracionNiveles = {
-            1: { tiempo: 45, mensaje: "¡Ya ganaste una copa! Conseguí la segunda." },
-            2: { tiempo: 35, mensaje: "¡Conseguiste la segunda, felicidades! Ahora ve por la tercera." },
-            3: { tiempo: 30, mensaje: "¡Felicidades, ahora sí vamos por la cuarta!" },
-            4: { tiempo: 25, mensaje: "¡Felicidades ganaste la cuarta!!" }
+            1: { tiempo: 45, mensaje: "Ya ganaste una copa, consegui la segunda." },
+            2: { tiempo: 35, mensaje: "Conseguiste la segunda felicidades ahora ve por la tercera." },
+            3: { tiempo: 30, mensaje: "Felicidades ahora si vamos por la cuarta," },
+            4: { tiempo: 25, mensaje: "Felicidades ganaste la cuarta!!" }
         };
 
         let nivelActual = 1;
@@ -385,7 +421,7 @@
                 document.getElementById('bloque-validacion-inicial').style.display = 'none';
                 document.getElementById('btn-jugar-oculto').style.display = 'block';
             } else {
-                errorDiv.innerHTML = "C&oacute;digo incorrecto. &iexcl;Volv&eacute; a intentarlo!";
+                errorDiv.innerHTML = "Codigo incorrecto. Volve a intentarlo!";
                 inputElement.value = "";
                 inputElement.focus();
             }
@@ -407,7 +443,7 @@
             document.getElementById('zona-juego').style.display = 'flex';
             
             nivelActual = 1;
-            actualizarMiniCopasHeader(0); // 0 copas al arrancar
+            actualizarVitrinaHeader(0); // Inicia con las 4 copas grises/apagadas
             cargarNivel(nivelActual);
         }
 
@@ -549,11 +585,9 @@
             document.getElementById('zona-juego').style.display = 'none';
             
             if (nivelActual === 4) {
-                // Generar las 4 copas en la pantalla de Messi
                 inyectarCopasVisuales('copas-pantalla-final', 4);
                 document.getElementById('pantalla-victoria-final').style.display = 'flex';
             } else {
-                // Generar copas acumuladas en la pantalla intermedia (Nivel 1 = 1 copa, Nivel 2 = 2 copas, etc.)
                 inyectarCopasVisuales('copas-pantalla-intermedia', nivelActual);
                 
                 const datosNivel = configuracionNiveles[nivelActual];
@@ -563,8 +597,8 @@
         }
 
         function avanzarSiguienteNivel() {
-            // Actualizar las mini copas en la cabecera antes de arrancar el siguiente nivel
-            actualizarMiniCopasHeader(nivelActual);
+            // Se "enciende" la copa que acaba de ganar en el panel superior
+            actualizarVitrinaHeader(nivelActual);
             
             document.getElementById('pantalla-progreso').style.display = 'none';
             document.getElementById('zona-juego').style.display = 'flex';
@@ -572,27 +606,27 @@
             cargarNivel(nivelActual);
         }
 
-        // FUNCIÓN AUXILIAR: Añade imágenes de copas repetidas en los paneles de victoria
+        // Dibuja las copas grandes en los carteles de victoria intermedia o final
         function inyectarCopasVisuales(idContenedor, cantidad) {
             const contenedor = document.getElementById(idContenedor);
             contenedor.innerHTML = "";
             for (let i = 0; i < cantidad; i++) {
                 const imgCopa = document.createElement('img');
                 imgCopa.src = 'copa.png';
-                imgCopa.alt = 'Copa Ganada';
+                imgCopa.alt = 'Copa';
                 contenedor.appendChild(imgCopa);
             }
         }
 
-        // FUNCIÓN AUXILIAR: Muestra las mini copas ganadas arriba al lado del logo pequeño
-        function actualizarMiniCopasHeader(cantidad) {
-            const contenedorMini = document.getElementById('mini-copas-header');
-            contenedorMini.innerHTML = "";
-            for (let i = 0; i < cantidad; i++) {
-                const miniCopa = document.createElement('img');
-                miniCopa.src = 'copa.png';
-                miniCopa.alt = 'Mini Copa';
-                contenedorMini.appendChild(miniCopa);
+        // Controla el contenedor blanco superior: Enciende de color las ganadas y opaca las que faltan
+        function actualizarVitrinaHeader(cantidadGanadas) {
+            for (let i = 1; i <= 4; i++) {
+                const copaImg = document.getElementById(`header-copa-${i}`);
+                if (i <= cantidadGanadas) {
+                    copaImg.className = "copa-activa";
+                } else {
+                    copaImg.className = "copa-bloqueada";
+                }
             }
         }
 
@@ -606,7 +640,7 @@
             inputElement.value = "";
             inputElement.focus();
             nivelActual = 1;
-            actualizarMiniCopasHeader(0);
+            actualizarVitrinaHeader(0);
         }
     </script>
 </body>
