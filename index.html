@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Juego de Memoria - Edición Especial</title>
-    <!-- Librería de íconos para WhatsApp -->
+    <title>Juego de Memoria - Desafío de las Copas</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -40,11 +39,6 @@
             50% { transform: scale(1.05); box-shadow: 0 8px 25px rgba(52, 152, 219, 0.8); background-color: #2980b9; }
         }
 
-        @keyframes titilarGratis {
-            0%, 100% { color: #c0392b; opacity: 1; }
-            50% { color: #f1c40f; opacity: 0.8; }
-        }
-
         /* COMPONENTES GENERALES */
         .btn-general {
             padding: 15px 40px;
@@ -62,7 +56,6 @@
 
         .btn-general:hover { transform: scale(1.08); background-color: #27ae60; }
 
-        /* PANTALLAS DE FLUJO */
         .pantalla-completa {
             display: flex;
             flex-direction: column;
@@ -85,7 +78,6 @@
             animation: moviLogo 4s ease-in-out infinite; 
         }
 
-        /* CONTENEDOR BLANCO UNIFICADO CON TRIPLE FILETE PATRIO EN EL PERÍMETRO */
         .contenedor-blanco-patrio {
             background-color: #ffffff;
             padding: 25px 30px;
@@ -96,8 +88,6 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            
-            /* TRIPLE FILETE PERIMETRAL */
             border: 6px solid #74acdf;
             outline: 4px solid #ffffff;
             outline-offset: -10px;
@@ -105,17 +95,12 @@
         }
 
         .imagen-messi {
-            max-width: 220px;
+            max-width: 260px;
             height: auto;
             border-radius: 12px;
+            margin-top: 15px;
             margin-bottom: 15px;
-        }
-
-        .logo-comercio-ajuste {
-            height: auto;
-            border: none !important;
-            box-shadow: none !important;
-            filter: none !important;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
         .bloque-contacto {
@@ -135,82 +120,27 @@
             animation: titilar 2s infinite ease-in-out;
         }
 
-        .contenedor-premio-argentino {
-            background-color: #ffffff;
-            padding: 15px 25px;
+        .input-codigo {
+            font-size: 1.4rem;
+            padding: 10px 15px;
+            width: 80%;
+            max-width: 250px;
+            text-align: center;
+            border: 3px solid #74acdf;
             border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-            max-width: 360px;
-            margin-bottom: 25px;
-            box-sizing: border-box;
-            border-top: 5px solid #74acdf;
-            border-bottom: 5px solid #74acdf;
-        }
-
-        .gratis-titilante {
-            font-weight: 900;
-            animation: titilarGratis 0.8s infinite ease-in-out;
-            display: inline-block;
-        }
-
-        .texto-premio-entrada {
-            font-size: 1.2rem;
+            margin-bottom: 15px;
+            outline: none;
             font-weight: bold;
-            color: #000000; 
-            margin: 0;
-            line-height: 1.4;
+            color: #2c3e50;
         }
 
-        .texto-premio-ganado {
-            font-size: 1.55rem;
+        .error-validacion {
+            color: #e74c3c;
             font-weight: bold;
-            color: #2c3e50; 
-            margin-bottom: 12px;
-            line-height: 1.3;
-        }
-
-        .texto-instruccion-ganado {
             font-size: 1.1rem;
-            color: #34495e;
-            margin-bottom: 20px;
-            font-weight: bold;
+            margin-bottom: 15px;
+            min-height: 24px;
         }
-
-        .btn-validar {
-            font-size: 1.3rem;
-            padding: 15px 35px;
-            border-radius: 50px;
-            animation: pulsoValidar 1.5s infinite ease-in-out;
-            color: #ffffff !important;
-        }
-
-        .btn-descargar {
-            background-color: #3498db;
-            font-size: 1.25rem;
-            padding: 12px 35px;
-            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
-            margin-top: 15px;
-            margin-bottom: 10px;
-            color: #ffffff !important;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: bold;
-            display: inline-block;
-            cursor: pointer;
-            border: none;
-        }
-        .btn-descargar:hover { background-color: #2980b9; transform: scale(1.05); }
-
-        .btn-salir {
-            background-color: #2ecc71;
-            font-size: 1.2rem;
-            padding: 12px 35px;
-            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.4);
-            margin-top: 5px;
-            margin-bottom: 0;
-            color: #ffffff !important;
-        }
-        .btn-salir:hover { background-color: #27ae60; transform: scale(1.05); }
 
         /* ZONA DEL JUEGO */
         #zona-juego {
@@ -296,16 +226,22 @@
 </head>
 <body>
 
-    <!-- 1. PANTALLA DE ENTRADA -->
     <div id="pantalla-entrada" class="pantalla-completa">
         <div class="logo-grande">
             <img src="logo.png" alt="Logo">
         </div>
-        <button class="btn-general" onclick="comenzarExperiencia()">JUGAR</button>
         
-        <div class="contenedor-premio-argentino">
-            <p class="texto-premio-entrada">CON LA COMPRA DE $50.000 TE LLEVAS <span class="gratis-titilante">GRATIS!!!</span> 1/2Kg. de CARNE PICADA.</p>
+        <div class="contenedor-blanco-patrio" id="bloque-validacion-inicial">
+            <h2 style="font-size: 1.6rem; margin-top: 0; color: #2c3e50;">Validación de Acceso</h2>
+            <p style="font-size: 1.1rem; margin-bottom: 15px; text-align: center;">Ingresá el código del día para comenzar el desafío:</p>
+            
+            <input type="text" id="input-pass" class="input-codigo" placeholder="Código" maxlength="10" autocomplete="off">
+            <div id="error-message" class="error-validacion"></div>
+            
+            <button class="btn-general" style="margin-bottom: 0; font-size: 1.3rem; padding: 10px 35px;" onclick="validarCodigoDinamico()">VALIDAR</button>
         </div>
+
+        <button id="btn-jugar-oculto" class="btn-general" style="display: none; animation: pulsoValidar 1.5s infinite ease-in-out;" onclick="comenzarExperiencia()">JUGAR</button>
 
         <a class="bloque-contacto" href="https://wa.me/541149496902" target="_blank" rel="noopener noreferrer">
             <i class="fa-brands fa-whatsapp"></i>
@@ -313,65 +249,40 @@
         </a>
     </div>
 
-    <!-- 2. PANTALLA DE PREMIO -->
-    <div id="pantalla-premio" class="pantalla-completa" style="display: none;">
+    <div id="pantalla-progreso" class="pantalla-completa" style="display: none;">
         <div class="contenedor-blanco-patrio">
-            <img src="messi.jpg" class="imagen-messi" alt="Messi Campeon">
+            <h2 id="titulo-progreso" style="font-size: 1.8rem; color: #2ecc71; margin-top: 0; line-height: 1.3;">¡Excelente!</h2>
+            <p id="mensaje-progreso" style="font-size: 1.3rem; color: #34495e; margin-bottom: 25px; font-weight: bold; line-height: 1.4;"></p>
             
-            <div class="texto-premio-ganado">&iexcl;Felicitaciones&excl; CON LA COMPRA DE $50.000 TE LLEVAS <span class="gratis-titilante">GRATIS!!!</span> 1/2Kg. de CARNE PICADA.</div>
-            <div class="texto-instruccion-ganado">Busca a un empleado para que valide tu premio.</div>
-            
-            <div class="logo-grande" style="margin-bottom: 15px;">
-                <img src="logocomercio.jpg" class="logo-comercio-ajuste" alt="Logo Comercio" style="max-width: 180px;">
-            </div>
-            
-            <button class="btn-general btn-validar" onclick="ejecutarValidacionDirecta()">VALIDAR PREMIO (solo empleados)</button>
+            <button id="btn-siguiente-nivel" class="btn-general" style="margin-bottom: 0;" onclick="avanzarSiguienteNivel()">JUGAR DE NUEVO</button>
         </div>
     </div>
 
-    <!-- 3. PANTALLA DE PREMIO YA VALIDADO -->
-    <div id="pantarma-validada" class="pantalla-completa" style="display: none;">
+    <div id="pantalla-victoria-final" class="pantalla-completa" style="display: none;">
         <div class="contenedor-blanco-patrio">
-            <div class="logo-grande" style="margin-bottom: 15px;">
-                <img src="logocomercio.jpg" class="logo-comercio-ajuste" alt="Logo Comercio" style="max-width: 220px;">
-            </div>
-            <h2 style="font-size: 2.1rem; color: #2ecc71; margin-bottom: 12px; margin-top: 0; font-weight: bold;">Tu premio fue validado.</h2>
+            <h2 style="font-size: 2rem; color: #2ecc71; margin-top: 0; font-weight: bold; line-height: 1.2;">¡Felicidades ganaste la cuarta!!</h2>
             
-            <!-- CORREGIDO: Mayúsculas, minúsculas y acentos blindados con HTML para evitar rombos -->
-            <p style="font-size: 1.2rem; color: #34495e; margin-bottom: 10px; font-weight: bold; line-height: 1.4;">Pod&eacute;s usar el beneficio ahora o descargar el cup&oacute;n para usarlo m&aacute;s tarde.</p>
+            <img src="messi.jpg" class="imagen-messi" alt="Messi Campeón">
             
-            <a href="cupon.jpg" download="cupon.jpg" class="btn-descargar">DESCARGAR CUP&Oacute;N</a>
-            
-            <button class="btn-general btn-salir" onclick="window.location.href='https://www.google.com'">salir del juego</button>
+            <button class="btn-general" style="background-color: #3498db; margin-bottom: 0;" onclick="reiniciarTodoElJuego()">VOLVER AL INICIO</button>
         </div>
     </div>
 
-    <!-- 4. PANTALLA DE BLOQUEO -->
-    <div id="pantalla-bloqueo" class="pantalla-completa" style="display: none;">
-        <div class="contenedor-blanco-patrio">
-            <div class="logo-grande" style="margin-bottom: 15px;">
-                <img src="logo.png" alt="Logo" style="max-width: 180px;">
-            </div>
-            <h2 style="font-size: 2.2rem; color: #e74c3c; margin-bottom: 15px; font-weight: 900; line-height: 1.2;">Ya participaste por hoy.</h2>
-            <p style="font-size: 1.25rem; color: #2c3e50; font-weight: bold; margin: 0; line-height: 1.4;">&iexcl;Muchas gracias por visitarnos&excl;</p>
-        </div>
-    </div>
-
-    <!-- 5. INTERFAZ DEL TABLERO DE JUEGO -->
     <div id="zona-juego">
         <div class="header-juego">
             <div class="logo-contenedor">
                 <img src="logo.png" alt="Logo Animado">
             </div>
-            <div class="temporizador" id="reloj">00:40</div>
+            <div style="color: #fff; font-weight: bold; font-size: 1.2rem;" id="indicador-copa">Copa: 1 / 4</div>
+            <div class="temporizador" id="reloj">00:45</div>
         </div>
 
         <div class="tablero" id="tablero"></div>
 
         <div id="pantalla-derrota">
             <h2>Perdiste</h2>
-            <p>Intentamos de nuevo?</p>
-            <button class="btn-general" onclick="reiniciarJuego()">Volver a jugar</button>
+            <p>¿Intentamos de nuevo este nivel?</p>
+            <button class="btn-general" onclick="reiniciarNivelActual()">Volver a intentar</button>
         </div>
     </div>
 
@@ -382,10 +293,18 @@
             '13.jpg', '14.jpg', '15.jpg'
         ];
 
+        const configuracionNiveles = {
+            1: { tiempo: 45, mensaje: "¡Ya ganaste una copa! Conseguí la segunda." },
+            2: { tiempo: 35, mensaje: "¡Conseguiste la segunda, felicidades! Ahora ve por la tercera." },
+            3: { tiempo: 30, mensaje: "¡Felicidades, ahora sí vamos por la cuarta!" },
+            4: { tiempo: 25, mensaje: "¡Felicidades ganaste la cuarta!!" }
+        };
+
+        let nivelActual = 1;
         let mazo = [];
         let fichasVolteadas = [];
         let bloqueoTablero = false;
-        let tiempoRestante = 40; 
+        let tiempoRestante = 45; 
         let intervaloReloj = null;
         let juegoIniciado = false;
 
@@ -401,21 +320,37 @@
         const sonidoMal = new Audio('mal.mp3');
 
         window.onload = function() {
-            document.getElementById('pantalla-premio').style.display = 'none';
-            document.getElementById('pantarma-validada').style.display = 'none';
-            document.getElementById('zona-juego').style.display = 'none';
-
-            const fechaHoy = new Date().toDateString();
-            const ultimoRegistro = localStorage.getItem('premioValidadoFecha');
-            
-            if (ultimoRegistro === fechaHoy) {
-                document.getElementById('pantalla-entrada').style.display = 'none';
-                document.getElementById('pantalla-bloqueo').style.display = 'flex';
-            } else {
-                document.getElementById('pantalla-bloqueo').style.display = 'none';
-                document.getElementById('pantalla-entrada').style.display = 'flex';
-            }
+            document.getElementById('input-pass').focus();
         };
+
+        function validarCodigoDinamico() {
+            const fecha = new Date();
+            const dia = fecha.getDate();
+            const mes = fecha.getMonth() + 1;
+            const anio = 26; 
+            
+            const codigoDelDia = ((dia * 17) + (mes * 31) + anio).toString();
+            
+            const inputElement = document.getElementById('input-pass');
+            const inputVal = inputElement.value.trim();
+            const errorDiv = document.getElementById('error-message');
+
+            if (inputVal === codigoDelDia) {
+                errorDiv.innerText = "";
+                document.getElementById('bloque-validacion-inicial').style.display = 'none';
+                document.getElementById('btn-jugar-oculto').style.display = 'block';
+            } else {
+                errorDiv.innerText = "Código incorrecto. ¡Volvé a intentarlo!";
+                inputElement.value = "";
+                inputElement.focus();
+            }
+        }
+
+        document.getElementById('input-pass').addEventListener('keyup', function(event) {
+            if (event.key === 'Enter') {
+                validarCodigoDinamico();
+            }
+        });
 
         function comenzarExperiencia() {
             const elem = document.documentElement;
@@ -425,6 +360,20 @@
 
             document.getElementById('pantalla-entrada').style.display = 'none';
             document.getElementById('zona-juego').style.display = 'flex';
+            
+            nivelActual = 1;
+            cargarNivel(nivelActual);
+        }
+
+        function cargarNivel(nivel) {
+            fichasVolteadas = [];
+            bloqueoTablero = false;
+            juegoIniciado = false;
+            
+            tiempoRestante = configuracionNiveles[nivel].tiempo;
+            relojElemento.innerText = `00:${tiempoRestante.toString().padStart(2, '0')}`;
+            document.getElementById('indicador-copa').innerText = `Copa: ${nivel} / 4`;
+            
             crearTablero();
         }
 
@@ -435,7 +384,7 @@
             return [...seleccionados, ...seleccionados, 'bobo.mp4'];
         }
 
-        function mezclar(array) {
+        function mazzcla(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [array[i], array[j]] = [array[j], array[i]];
@@ -464,20 +413,18 @@
             pantallaDerrota.style.display = 'flex';
         }
 
-        function reiniciarJuego() {
-            tiempoRestante = 40; fichasVolteadas = []; bloqueoTablero = false; juegoIniciado = false;
+        function reiniciarNivelActual() {
+            pantallaDerrota.style.display = 'none';
             sonidoTicTac.pause(); sonidoTicTac.currentTime = 0;
             sonidoMal.pause(); sonidoMal.currentTime = 0;
             sonidoHinchada.pause(); sonidoHinchada.currentTime = 0;
-            relojElemento.innerText = "00:40";
-            pantallaDerrota.style.display = 'none';
-            crearTablero();
+            cargarNivel(nivelActual);
         }
 
         function crearTablero() {
             tableroElemento.innerHTML = '';
             mazo = seleccionarJugadores();
-            mezclar(mazo);
+            mazzcla(mazo);
             mazo.forEach((archivo) => {
                 const ficha = document.createElement('div');
                 ficha.classList.add('ficha');
@@ -543,8 +490,7 @@
                     sonidoTicTac.pause();
                     
                     setTimeout(() => {
-                        document.getElementById('zona-juego').style.display = 'none';
-                        document.getElementById('pantalla-premio').style.display = 'flex';
+                        manejarVictoriaNivel();
                     }, 500);
                 }
             } else {
@@ -553,12 +499,36 @@
             }
         }
 
-        function ejecutarValidacionDirecta() {
-            const fechaHoy = new Date().toDateString();
-            localStorage.setItem('premioValidadoFecha', fechaHoy);
+        function manejarVictoriaNivel() {
+            document.getElementById('zona-juego').style.display = 'none';
             
-            document.getElementById('pantalla-premio').style.display = 'none';
-            document.getElementById('pantarma-validada').style.display = 'flex';
+            if (nivelActual === 4) {
+                document.getElementById('pantalla-victoria-final').style.display = 'flex';
+            } else {
+                const datosNivel = configuracionNiveles[nivelActual];
+                document.getElementById('mensaje-progreso').innerText = datosNivel.mensaje;
+                document.getElementById('pantalla-progreso').style.display = 'flex';
+            }
+        }
+
+        function avanzarSiguienteNivel() {
+            document.getElementById('pantalla-progreso').style.display = 'none';
+            document.getElementById('zona-juego').style.display = 'flex';
+            nivelActual++;
+            cargarNivel(nivelActual);
+        }
+
+        function reiniciarTodoElJuego() {
+            // Permite resetear por completo el flujo y volver a la pantalla inicial pidiendo código
+            document.getElementById('pantalla-victoria-final').style.display = 'none';
+            document.getElementById('btn-jugar-oculto').style.display = 'none';
+            document.getElementById('bloque-validacion-inicial').style.display = 'flex';
+            document.getElementById('pantalla-entrada').style.display = 'flex';
+            
+            const inputElement = document.getElementById('input-pass');
+            inputElement.value = "";
+            inputElement.focus();
+            nivelActual = 1;
         }
     </script>
 </body>
