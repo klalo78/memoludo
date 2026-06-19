@@ -76,10 +76,17 @@
             box-sizing: border-box;
         }
 
+        /* AJUSTE ESPECÍFICO PANTALLA ENTRADA PARA EL PIE */
+        #pantalla-entrada {
+            justify-content: space-between;
+            padding-top: 6vh;
+            padding-bottom: 5vh;
+        }
+
         .logo-grande img {
             max-width: 280px;
             height: auto;
-            margin-bottom: 30px;
+            margin-bottom: 10px;
             animation: moviLogo 4s ease-in-out infinite; 
         }
 
@@ -122,31 +129,32 @@
             filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.3));
         }
 
-        /* TEXTO DEL PIE MODIFICADO */
+        /* TEXTO DEL PIE ACOMODADO MÁS ABAJO */
         .bloque-contacto {
             display: inline-block;
             cursor: pointer;
             text-decoration: none;
             transition: transform 0.2s;
-            margin-top: 20px;
+            margin-top: auto; /* Empuja al pie dentro del contenedor flex */
+            padding: 10px;
         }
         .bloque-contacto:hover { transform: scale(1.1); }
         .bloque-contacto span {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.75);
+            font-size: 1.05rem;
             font-style: italic;
             font-weight: bold;
             letter-spacing: 1px;
             animation: titilar 2s infinite ease-in-out;
         }
 
-        /* ESTILOS DE LA VENTANA JARD */
+        /* MODAL CON SECCIÓN DE TRASLUCIDEZ MEJORADA */
         .modal-jard {
             display: none; 
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(4px);
+            background-color: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(6px);
             z-index: 100;
             align-items: center;
             justify-content: center;
@@ -155,12 +163,15 @@
         }
 
         .tarjeta-jard {
-            background-color: rgba(255, 255, 255, 0.92);
-            color: #2c3e50;
+            /* REAJUSTADO: Más traslúcido y con desenfoque de fondo */
+            background-color: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            color: #1a252f;
             padding: 30px 25px;
             border-radius: 20px;
             border: 4px solid #74acdf;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.35);
             max-width: 340px;
             width: 100%;
             text-align: center;
@@ -174,30 +185,33 @@
             margin: 0 0 5px 0;
             color: #1a252f;
             letter-spacing: 2px;
+            text-shadow: 1px 1px 1px rgba(255,255,255,0.6);
         }
 
         .tarjeta-jard .sub-sub {
             font-size: 1.15rem;
             font-style: italic;
-            color: #7f8c8d;
+            color: #4f5d5e;
             margin-bottom: 15px;
             font-weight: bold;
         }
 
         .tarjeta-jard .tags-servicios {
             font-size: 0.95rem;
-            color: #34495e;
+            color: #1a252f;
             line-height: 1.6;
             margin-bottom: 20px;
-            background: rgba(116, 172, 223, 0.15);
+            background: rgba(255, 255, 255, 0.5);
             padding: 10px;
             border-radius: 10px;
+            font-weight: bold;
+            border: 1px solid rgba(116, 172, 223, 0.3);
         }
 
         .tarjeta-jard .label-contacto {
             font-size: 1.1rem;
             font-weight: bold;
-            color: #2c3e50;
+            color: #1a252f;
             margin-bottom: 8px;
         }
 
@@ -393,7 +407,7 @@
             <button class="btn-general" style="margin-bottom: 0; font-size: 1.3rem; padding: 10px 35px;" onclick="validarCodigoDinamico()">VALIDAR</button>
         </div>
 
-        <button id="btn-jugar-oculto" class="btn-general" style="display: none; animation: pulsoValidar 1.5s infinite ease-in-out;" onclick="comenzarExperiencia()">JUGAR</button>
+        <button id="btn-jugar-oculto" class="btn-general" style="display: none; animation: pulsoValidar 1.5s infinite ease-in-out; margin-bottom: 0;" onclick="comenzarExperiencia()">JUGAR</button>
 
         <div class="bloque-contacto" onclick="abrirModalJard()">
             <span>dise&ntilde;o multimedia</span>
@@ -479,7 +493,6 @@
             '13.jpg', '14.jpg', '15.jpg'
         ];
 
-        // Mensajes dinámicos blindados con entidades HTML para evitar rombos
         const configuracionNiveles = {
             1: { tiempo: 45, mensaje: "Ya ganaste una copa, consegu\u00ED la segunda." },
             2: { tiempo: 40, mensaje: "Conseguiste la segunda, \u00A1felicidades! Ahora ve por la tercera." },
@@ -726,10 +739,10 @@
             cargarNivel(nivelActual);
         }
 
-        function inyectarCopasVisuales(idContenedor, cantidad) {
+        function inyectarCopasVisuales(idContenedor, quantity) {
             const contenedor = document.getElementById(idContenedor);
             contenedor.innerHTML = "";
-            for (let i = 0; i < cantidad; i++) {
+            for (let i = 0; i < quantity; i++) {
                 const imgCopa = document.createElement('img');
                 imgCopa.src = 'copa.png';
                 imgCopa.alt = 'Copa';
