@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Juego de Memoria - Desafío de las Copas</title>
+    <!-- Librería de íconos para WhatsApp -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -37,6 +38,11 @@
         @keyframes pulsoValidar {
             0%, 100% { transform: scale(1); box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4); background-color: #2ecc71; }
             50% { transform: scale(1.05); box-shadow: 0 8px 25px rgba(52, 152, 219, 0.8); background-color: #27ae60; }
+        }
+
+        @keyframes flotarVentana {
+            0%, 100% { transform: scale(1) translateY(0px); }
+            50% { transform: scale(1.02) translateY(-6px); }
         }
 
         /* COMPONENTES GENERALES */
@@ -117,22 +123,115 @@
             filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.3));
         }
 
+        /* TEXTO DEL PIE MODIFICADO */
         .bloque-contacto {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
+            display: inline-block;
+            cursor: pointer;
             text-decoration: none;
             transition: transform 0.2s;
-            margin-top: 15px;
+            margin-top: 20px;
         }
         .bloque-contacto:hover { transform: scale(1.1); }
-        .bloque-contacto i { color: #25d366; font-size: 1.8rem; }
         .bloque-contacto span {
-            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1rem;
             font-style: italic;
+            font-weight: bold;
+            letter-spacing: 1px;
             animation: titilar 2s infinite ease-in-out;
         }
+
+        /* ESTILOS DE LA NUEVA VENTANA DE PRESENTACIÓN JARD */
+        .modal-jard {
+            display: none; 
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px); /* Sutil difuminado de fondo */
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .tarjeta-jard {
+            background-color: rgba(255, 255, 255, 0.92); /* Ventana un poco translúcida */
+            color: #2c3e50;
+            padding: 30px 25px;
+            border-radius: 20px;
+            border: 4px solid #74acdf;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            max-width: 340px;
+            width: 100%;
+            text-align: center;
+            box-sizing: border-box;
+            animation: flotarVentana 3.5s ease-in-out infinite; /* Centrada y moviéndose */
+        }
+
+        .tarjeta-jard h3 {
+            font-size: 2.4rem;
+            font-weight: 900; /* Letras bold negritas */
+            margin: 0 0 5px 0;
+            color: #1a252f;
+            letter-spacing: 2px;
+        }
+
+        .tarjeta-jard .sub-sub {
+            font-size: 1.15rem;
+            font-style: italic;
+            color: #7f8c8d;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .tarjeta-jard .tags-servicios {
+            font-size: 0.95rem;
+            color: #34495e;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            background: rgba(116, 172, 223, 0.15);
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .tarjeta-jard .label-contacto {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .tarjeta-jard .enlace-wa {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #25d366;
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+            transition: transform 0.2s;
+            margin-bottom: 20px;
+        }
+        .tarjeta-jard .enlace-wa:hover { transform: scale(1.05); }
+
+        .tarjeta-jard .btn-cerrar-jard {
+            background-color: #e74c3c;
+            color: #ffffff;
+            border: none;
+            padding: 6px 18px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 3px 8px rgba(231, 76, 60, 0.3);
+            transition: background-color 0.2s;
+        }
+        .tarjeta-jard .btn-cerrar-jard:hover { background-color: #c0392b; }
 
         .input-codigo {
             font-size: 1.2rem;
@@ -190,7 +289,6 @@
             animation: moviLogo 4s ease-in-out infinite; 
         }
 
-        /* CONTENEDOR BLANCO ESTÉTICO PARA LAS 4 COPITAS */
         .vitrina-copas-header {
             background-color: #ffffff;
             border: 2px solid #74acdf;
@@ -281,6 +379,7 @@
 </head>
 <body>
 
+    <!-- 1. PANTALLA PRINCIPAL: PEDIR CÓDIGO -->
     <div id="pantalla-entrada" class="pantalla-completa">
         <div class="logo-grande">
             <img src="logo.png" alt="Logo">
@@ -296,14 +395,38 @@
             <button class="btn-general" style="margin-bottom: 0; font-size: 1.3rem; padding: 10px 35px;" onclick="validarCodigoDinamico()">VALIDAR</button>
         </div>
 
+        <!-- Botón JUGAR oculto por defecto -->
         <button id="btn-jugar-oculto" class="btn-general" style="display: none; animation: pulsoValidar 1.5s infinite ease-in-out;" onclick="comenzarExperiencia()">JUGAR</button>
 
-        <a class="bloque-contacto" href="https://wa.me/541149496902" target="_blank" rel="noopener noreferrer">
-            <i class="fa-brands fa-whatsapp"></i>
+        <!-- Texto limpio de diseño multimedia para desplegar la ventana -->
+        <div class="bloque-contacto" onclick="abrirModalJard()">
             <span>dise&ntilde;o multimedia</span>
-        </a>
+        </div>
     </div>
 
+    <!-- NUEVA VENTANA DE PRESENTACIÓN INTERACTIVA JARD (MODAL) -->
+    <div id="modal-jard" class="modal-jard" onclick="cerrarModalJardAfuera(event)">
+        <div class="tarjeta-jard">
+            <h3>JARD</h3>
+            <div class="sub-sub">Dise&ntilde;o multimedia</div>
+            
+            <div class="tags-servicios">
+                Webb apps &bull; QR Design<br>Shorts games
+            </div>
+            
+            <div class="label-contacto">Contacto:</div>
+            
+            <a href="https://wa.me/541149496902" target="_blank" rel="noopener noreferrer" class="enlace-wa">
+                <i class="fa-brands fa-whatsapp"></i>
+                54 1149496902
+            </a>
+            
+            <br>
+            <button class="btn-cerrar-jard" onclick="cerrarModalJard()">cerrar</button>
+        </div>
+    </div>
+
+    <!-- 2. PANTALLA INTERMEDIA DE PROGRESO -->
     <div id="pantalla-progreso" class="pantalla-completa" style="display: none;">
         <div class="contenedor-blanco-patrio">
             <h2 style="font-size: 1.8rem; color: #2ecc71; margin-top: 0; line-height: 1.3;">Excelente!</h2>
@@ -316,6 +439,7 @@
         </div>
     </div>
 
+    <!-- 3. PANTALLA VICTORIA FINAL -->
     <div id="pantalla-victoria-final" class="pantalla-completa" style="display: none;">
         <div class="contenedor-blanco-patrio">
             <h2 style="font-size: 1.9rem; color: #2ecc71; margin-top: 0; font-weight: bold; line-height: 1.2;">Felicidades ganaste la cuarta!!</h2>
@@ -328,6 +452,7 @@
         </div>
     </div>
 
+    <!-- 4. INTERFAZ DEL TABLERO DE JUEGO -->
     <div id="zona-juego">
         <div class="header-juego">
             <div class="logo-contenedor-copas">
@@ -362,7 +487,6 @@
             '13.jpg', '14.jpg', '15.jpg'
         ];
 
-        // Tiempos actualizados: 45s, 40s, 35s y 25s
         const configuracionNiveles = {
             1: { tiempo: 45, mensaje: "Ya ganaste una copa, consegui la segunda." },
             2: { tiempo: 40, mensaje: "Conseguiste la segunda felicidades ahora ve por la tercera." },
@@ -392,6 +516,22 @@
         window.onload = function() {
             document.getElementById('input-pass').focus();
         };
+
+        /* --- LOGICA MODAL JARD --- */
+        function abrirModalJard() {
+            document.getElementById('modal-jard').style.display = 'flex';
+        }
+
+        function cerrarModalJard() {
+            document.getElementById('modal-jard').style.display = 'none';
+        }
+
+        function cerrarModalJardAfuera(e) {
+            // Cierra la ventana si tocan fuera del recuadro blanco
+            if (e.target.id === 'modal-jard') {
+                cerrarModalJard();
+            }
+        }
 
         function validarCodigoDinamico() {
             const fecha = new Date();
