@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Juego de Memoria - Desafío de las Copas</title>
-    <!-- Librería de íconos para WhatsApp -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -141,13 +140,13 @@
             animation: titilar 2s infinite ease-in-out;
         }
 
-        /* ESTILOS DE LA NUEVA VENTANA DE PRESENTACIÓN JARD */
+        /* ESTILOS DE LA VENTANA JARD */
         .modal-jard {
             display: none; 
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background-color: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(4px); /* Sutil difuminado de fondo */
+            backdrop-filter: blur(4px);
             z-index: 100;
             align-items: center;
             justify-content: center;
@@ -156,7 +155,7 @@
         }
 
         .tarjeta-jard {
-            background-color: rgba(255, 255, 255, 0.92); /* Ventana un poco translúcida */
+            background-color: rgba(255, 255, 255, 0.92);
             color: #2c3e50;
             padding: 30px 25px;
             border-radius: 20px;
@@ -166,12 +165,12 @@
             width: 100%;
             text-align: center;
             box-sizing: border-box;
-            animation: flotarVentana 3.5s ease-in-out infinite; /* Centrada y moviéndose */
+            animation: flotarVentana 3.5s ease-in-out infinite;
         }
 
         .tarjeta-jard h3 {
             font-size: 2.4rem;
-            font-weight: 900; /* Letras bold negritas */
+            font-weight: 900;
             margin: 0 0 5px 0;
             color: #1a252f;
             letter-spacing: 2px;
@@ -379,32 +378,28 @@
 </head>
 <body>
 
-    <!-- 1. PANTALLA PRINCIPAL: PEDIR CÓDIGO -->
     <div id="pantalla-entrada" class="pantalla-completa">
         <div class="logo-grande">
             <img src="logo.png" alt="Logo">
         </div>
         
         <div class="contenedor-blanco-patrio" id="bloque-validacion-inicial">
-            <h2 style="font-size: 1.6rem; margin-top: 0; color: #2c3e50;">Validacion de Acceso</h2>
-            <p style="font-size: 1.1rem; margin-bottom: 15px; text-align: center;">Ingresa el codigo del dia para comenzar el desafio:</p>
+            <h2 style="font-size: 1.6rem; margin-top: 0; color: #2c3e50;">Validaci&oacute;n de Acceso</h2>
+            <p style="font-size: 1.1rem; margin-bottom: 15px; text-align: center;">Ingres&aacute; el c&oacute;digo del d&iacute;a para comenzar el desaf&iacute;o:</p>
             
-            <input type="text" id="input-pass" class="input-codigo" placeholder="Ingresa el codigo aqui" maxlength="25" autocomplete="off">
+            <input type="text" id="input-pass" class="input-codigo" placeholder="Ingres&aacute; el c&oacute;digo aqu&iacute;" maxlength="25" autocomplete="off">
             <div id="error-message" class="error-validacion"></div>
             
             <button class="btn-general" style="margin-bottom: 0; font-size: 1.3rem; padding: 10px 35px;" onclick="validarCodigoDinamico()">VALIDAR</button>
         </div>
 
-        <!-- Botón JUGAR oculto por defecto -->
         <button id="btn-jugar-oculto" class="btn-general" style="display: none; animation: pulsoValidar 1.5s infinite ease-in-out;" onclick="comenzarExperiencia()">JUGAR</button>
 
-        <!-- Texto limpio de diseño multimedia para desplegar la ventana -->
         <div class="bloque-contacto" onclick="abrirModalJard()">
             <span>dise&ntilde;o multimedia</span>
         </div>
     </div>
 
-    <!-- NUEVA VENTANA DE PRESENTACIÓN INTERACTIVA JARD (MODAL) -->
     <div id="modal-jard" class="modal-jard" onclick="cerrarModalJardAfuera(event)">
         <div class="tarjeta-jard">
             <h3>JARD</h3>
@@ -426,10 +421,9 @@
         </div>
     </div>
 
-    <!-- 2. PANTALLA INTERMEDIA DE PROGRESO -->
     <div id="pantalla-progreso" class="pantalla-completa" style="display: none;">
         <div class="contenedor-blanco-patrio">
-            <h2 style="font-size: 1.8rem; color: #2ecc71; margin-top: 0; line-height: 1.3;">Excelente!</h2>
+            <h2 style="font-size: 1.8rem; color: #2ecc71; margin-top: 0; line-height: 1.3;">&iexcl;Excelente!</h2>
             
             <div id="copas-pantalla-intermedia" class="contenedor-copas-pantalla"></div>
 
@@ -439,10 +433,9 @@
         </div>
     </div>
 
-    <!-- 3. PANTALLA VICTORIA FINAL -->
     <div id="pantalla-victoria-final" class="pantalla-completa" style="display: none;">
         <div class="contenedor-blanco-patrio">
-            <h2 style="font-size: 1.9rem; color: #2ecc71; margin-top: 0; font-weight: bold; line-height: 1.2;">Felicidades ganaste la cuarta!!</h2>
+            <h2 style="font-size: 1.9rem; color: #2ecc71; margin-top: 0; font-weight: bold; line-height: 1.2;">&iexcl;Felicidades ganaste la cuarta!!</h2>
             
             <div id="copas-pantalla-final" class="contenedor-copas-pantalla"></div>
 
@@ -452,7 +445,6 @@
         </div>
     </div>
 
-    <!-- 4. INTERFAZ DEL TABLERO DE JUEGO -->
     <div id="zona-juego">
         <div class="header-juego">
             <div class="logo-contenedor-copas">
@@ -475,7 +467,7 @@
 
         <div id="pantalla-derrota">
             <h2>Perdiste</h2>
-            <p>Intentamos de nuevo este nivel?</p>
+            <p>&iquest;Intentamos de nuevo este nivel?</p>
             <button class="btn-general" onclick="reiniciarNivelActual()">Volver a intentar</button>
         </div>
     </div>
@@ -487,11 +479,12 @@
             '13.jpg', '14.jpg', '15.jpg'
         ];
 
+        // Mensajes dinámicos blindados con entidades HTML para evitar rombos
         const configuracionNiveles = {
-            1: { tiempo: 45, mensaje: "Ya ganaste una copa, consegui la segunda." },
-            2: { tiempo: 40, mensaje: "Conseguiste la segunda felicidades ahora ve por la tercera." },
-            3: { tiempo: 35, mensaje: "Felicidades ahora si vamos por la cuarta," },
-            4: { tiempo: 25, mensaje: "Felicidades ganaste la cuarta!!" }
+            1: { tiempo: 45, mensaje: "Ya ganaste una copa, consegu\u00ED la segunda." },
+            2: { tiempo: 40, mensaje: "Conseguiste la segunda, \u00A1felicidades! Ahora ve por la tercera." },
+            3: { tiempo: 35, mensaje: "\u00A1Felicidades! Ahora s\u00ED vamos por la cuarta." },
+            4: { tiempo: 25, mensaje: "\u00A1Felicidades ganaste la cuarta!!" }
         };
 
         let nivelActual = 1;
@@ -527,7 +520,6 @@
         }
 
         function cerrarModalJardAfuera(e) {
-            // Cierra la ventana si tocan fuera del recuadro blanco
             if (e.target.id === 'modal-jard') {
                 cerrarModalJard();
             }
@@ -550,7 +542,7 @@
                 document.getElementById('bloque-validacion-inicial').style.display = 'none';
                 document.getElementById('btn-jugar-oculto').style.display = 'block';
             } else {
-                errorDiv.innerHTML = "Codigo incorrecto. Volve a intentarlo!";
+                errorDiv.innerHTML = "C&oacute;digo incorrecto. &iexcl;Volv&eacute; a intentarlo!";
                 inputElement.value = "";
                 inputElement.focus();
             }
