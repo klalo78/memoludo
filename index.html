@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Juego de Memoria - Desafío de las Copas</title>
+    <!-- Librería de íconos para WhatsApp -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -76,17 +77,17 @@
             box-sizing: border-box;
         }
 
-        /* AJUSTE ESPECÍFICO PANTALLA ENTRADA PARA EL PIE */
+        /* AJUSTE ESPECÍFICO PANTALLA ENTRADA */
         #pantalla-entrada {
-            justify-content: space-between;
-            padding-top: 6vh;
-            padding-bottom: 5vh;
+            justify-content: flex-start; /* Permite controlar los espacios manualmente */
+            padding-top: 10vh; /* Baja el logo un poco más abajo */
+            padding-bottom: 8vh;
         }
 
         .logo-grande img {
             max-width: 280px;
             height: auto;
-            margin-bottom: 10px;
+            margin-bottom: 30px; /* Espacio debajo del logo */
             animation: moviLogo 4s ease-in-out infinite; 
         }
 
@@ -129,13 +130,14 @@
             filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.3));
         }
 
-        /* TEXTO DEL PIE ACOMODADO MÁS ABAJO */
+        /* TEXTO DEL PIE ACOMODADO NO TAN ABAJO */
         .bloque-contacto {
             display: inline-block;
             cursor: pointer;
             text-decoration: none;
             transition: transform 0.2s;
-            margin-top: auto; /* Empuja al pie dentro del contenedor flex */
+            margin-top: auto; /* Empuja hacia la zona inferior */
+            margin-bottom: 3vh; /* Lo separa del borde del fondo para que no quede tan al pie */
             padding: 10px;
         }
         .bloque-contacto:hover { transform: scale(1.1); }
@@ -148,7 +150,7 @@
             animation: titilar 2s infinite ease-in-out;
         }
 
-        /* MODAL CON SECCIÓN DE TRASLUCIDEZ MEJORADA */
+        /* MODAL CON SECCIÓN DE TRASLUCIDEZ */
         .modal-jard {
             display: none; 
             position: fixed;
@@ -163,7 +165,6 @@
         }
 
         .tarjeta-jard {
-            /* REAJUSTADO: Más traslúcido y con desenfoque de fondo */
             background-color: rgba(255, 255, 255, 0.65);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
@@ -392,6 +393,7 @@
 </head>
 <body>
 
+    <!-- 1. PANTALLA PRINCIPAL: PEDIR CÓDIGO -->
     <div id="pantalla-entrada" class="pantalla-completa">
         <div class="logo-grande">
             <img src="logo.png" alt="Logo">
@@ -407,20 +409,24 @@
             <button class="btn-general" style="margin-bottom: 0; font-size: 1.3rem; padding: 10px 35px;" onclick="validarCodigoDinamico()">VALIDAR</button>
         </div>
 
-        <button id="btn-jugar-oculto" class="btn-general" style="display: none; animation: pulsoValidar 1.5s infinite ease-in-out; margin-bottom: 0;" onclick="comenzarExperiencia()">JUGAR</button>
+        <!-- Botón JUGAR: Un poco más abajo con margen superior controlado -->
+        <button id="btn-jugar-oculto" class="btn-general" style="display: none; animation: pulsoValidar 1.5s infinite ease-in-out; margin-top: 20px; margin-bottom: 0;" onclick="comenzarExperiencia()">JUGAR</button>
 
+        <!-- Texto de diseño multimedia en el pie corregido -->
         <div class="bloque-contacto" onclick="abrirModalJard()">
             <span>dise&ntilde;o multimedia</span>
         </div>
     </div>
 
+    <!-- VENTANA TRANSLÚCIDA INTERACTIVA JARD (MODAL) -->
     <div id="modal-jard" class="modal-jard" onclick="cerrarModalJardAfuera(event)">
         <div class="tarjeta-jard">
             <h3>JARD</h3>
             <div class="sub-sub">Dise&ntilde;o multimedia</div>
             
+            <!-- Corregido a Web Apps -->
             <div class="tags-servicios">
-                Webb apps &bull; QR Design<br>Shorts games
+                Web Apps &bull; QR Design<br>Shorts games
             </div>
             
             <div class="label-contacto">Contacto:</div>
@@ -435,10 +441,12 @@
         </div>
     </div>
 
+    <!-- 2. PANTALLA INTERMEDIA DE PROGRESO -->
     <div id="pantalla-progreso" class="pantalla-completa" style="display: none;">
         <div class="contenedor-blanco-patrio">
             <h2 style="font-size: 1.8rem; color: #2ecc71; margin-top: 0; line-height: 1.3;">&iexcl;Excelente!</h2>
             
+            <!-- Contenedor de copas grandes conseguidas -->
             <div id="copas-pantalla-intermedia" class="contenedor-copas-pantalla"></div>
 
             <p id="mensaje-progreso" style="font-size: 1.3rem; color: #34495e; margin-bottom: 25px; font-weight: bold; line-height: 1.4;"></p>
@@ -447,10 +455,12 @@
         </div>
     </div>
 
+    <!-- 3. PANTALLA VICTORIA FINAL -->
     <div id="pantalla-victoria-final" class="pantalla-completa" style="display: none;">
         <div class="contenedor-blanco-patrio">
             <h2 style="font-size: 1.9rem; color: #2ecc71; margin-top: 0; font-weight: bold; line-height: 1.2;">&iexcl;Felicidades ganaste la cuarta!!</h2>
             
+            <!-- Muestra las 4 copas grandes -->
             <div id="copas-pantalla-final" class="contenedor-copas-pantalla"></div>
 
             <img src="messi.jpg" class="imagen-messi" alt="Messi Campeon">
@@ -459,6 +469,7 @@
         </div>
     </div>
 
+    <!-- 4. INTERFAZ DEL TABLERO DE JUEGO -->
     <div id="zona-juego">
         <div class="header-juego">
             <div class="logo-contenedor-copas">
@@ -753,7 +764,7 @@
         function actualizarVitrinaHeader(cantidadGanadas) {
             for (let i = 1; i <= 4; i++) {
                 const copaImg = document.getElementById(`header-copa-${i}`);
-                if (i <= cantidadGanadas) {
+                if (i <= quantity = cantidadGanadas) {
                     copaImg.className = "copa-activa";
                 } else {
                     copaImg.className = "copa-bloqueada";
