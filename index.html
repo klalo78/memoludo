@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Juego de Memoria - Desaf√≠o de las Copas</title>
-    <!-- Librer√≠a de √≠conos para WhatsApp -->
+    <title>Juego de Memoria - DesafÌo de las Copas</title>
+    <!-- LibrerÌa de Ìconos para WhatsApp -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -33,6 +33,11 @@
         @keyframes titilar {
             0%, 100% { color: rgba(255, 255, 255, 0.6); }
             50% { color: rgba(255, 255, 255, 1); text-shadow: 0 0 10px rgba(255,255,255,0.8); }
+        }
+
+        @keyframes titilarOscuro {
+            0%, 100% { color: rgba(44, 62, 80, 0.6); }
+            50% { color: rgba(44, 62, 80, 1); text-shadow: 0 0 8px rgba(116, 172, 223, 0.5); }
         }
 
         @keyframes pulsoValidar {
@@ -108,6 +113,18 @@
             z-index: 15;
         }
 
+        /* CONTENEDOR FINAL TRANSL⁄CIDO (EFECTO VIDRIO) */
+        .contenedor-final-traslucido {
+            background-color: rgba(255, 255, 255, 0.65) !important;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            color: #1a252f !important;
+            border: 6px solid #74acdf;
+            outline: 4px solid rgba(255, 255, 255, 0.5);
+            outline-offset: -10px;
+            box-shadow: inset 0 0 0 6px #74acdf, 0 6px 25px rgba(0,0,0,0.35);
+        }
+
         .imagen-messi {
             max-width: 260px;
             height: auto;
@@ -131,7 +148,7 @@
             filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.3));
         }
 
-        /* PIE DE P√ÅGINA */
+        /* PIE DE P¡GINA */
         .bloque-contacto {
             display: inline-block;
             cursor: pointer;
@@ -151,7 +168,23 @@
             animation: titilar 2s infinite ease-in-out;
         }
 
-        /* MODAL TRANSL√öCIDO JARD */
+        /* BOT”N DISE—O ADENTRO DEL PANEL DE VICTORIA */
+        .bloque-contacto-final {
+            margin-top: 15px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            padding: 5px 15px;
+        }
+        .bloque-contacto-final:hover { transform: scale(1.1); }
+        .bloque-contacto-final span {
+            font-size: 1.2rem;
+            font-style: italic;
+            font-weight: bold;
+            letter-spacing: 1px;
+            animation: titilarOscuro 2s infinite ease-in-out;
+        }
+
+        /* MODAL TRANSL⁄CIDO JARD */
         .modal-jard {
             display: none; 
             position: fixed;
@@ -393,7 +426,7 @@
         </div>
     </div>
 
-    <!-- VENTANA TRANSL√öCIDA INTERACTIVA JARD (MODAL) -->
+    <!-- VENTANA TRANSL⁄CIDA INTERACTIVA JARD (MODAL) -->
     <div id="modal-jard" class="modal-jard" onclick="cerrarModalJardAfuera(event)">
         <div class="tarjeta-jard">
             <h3>JARD</h3>
@@ -424,24 +457,28 @@
 
             <p id="mensaje-progreso" style="font-size: 1.3rem; color: #34495e; margin-bottom: 25px; font-weight: bold; line-height: 1.4;"></p>
             
-            <button id="btn-siguiente-nivel" class="btn-general" style="margin-bottom: 0;" onclick="avanzarSiguienteNivel()">JUGAR DE NUEVO</button>
+            <!-- BotÛn con texto din·mico controlado desde JS -->
+            <button id="btn-siguiente-nivel" class="btn-general" style="margin-bottom: 0;" onclick="avanzarSiguienteNivel()">VAMOS POR LA SEGUNDA</button>
         </div>
     </div>
 
-    <!-- 3. PANTALLA VICTORIA FINAL (CON VIDEO DE FONDO) -->
+    <!-- 3. PANTALLA VICTORIA FINAL (CON VIDEO DE FONDO Y CONTENEDOR TRANSL⁄CIDO) -->
     <div id="pantalla-victoria-final" class="pantalla-completa" style="display: none;">
         <video id="video-ganador-fondo" class="video-fondo-victoria" loop muted playsinline>
             <source src="escalonillorando.mp4" type="video/mp4">
         </video>
 
-        <div class="contenedor-blanco-patrio">
+        <div class="contenedor-blanco-patrio contenedor-final-traslucido">
             <h2 style="font-size: 1.9rem; color: #2ecc71; margin-top: 0; font-weight: bold; line-height: 1.2;">&iexcl;Felicidades ganaste la cuarta!!</h2>
             
             <div id="copas-pantalla-final" class="contenedor-copas-pantalla"></div>
 
             <img src="messi.jpg" class="imagen-messi" alt="Messi Campeon">
             
-            <button class="btn-general" style="background-color: #3498db; margin-bottom: 0;" onclick="reiniciarTodoElJuego()">VOLVER AL INICIO</button>
+            <!-- BotÛn de diseÒo multimedia que abre JARD de manera transl˙cida -->
+            <div class="bloque-contacto-final" onclick="abrirModalJard()">
+                <span>dise&ntilde;o multimedia</span>
+            </div>
         </div>
     </div>
 
@@ -481,9 +518,9 @@
         ];
 
         const configuracionNiveles = {
-            1: { tiempo: 45, mensaje: "Ya ganaste una copa, consegu\u00ED la segunda." },
-            2: { tiempo: 40, mensaje: "Conseguiste la segunda, \u00A1felicidades! Ahora ve por la tercera." },
-            3: { tiempo: 35, mensaje: "\u00A1Felicidades! Ahora s\u00ED vamos por la cuarta." },
+            1: { tiempo: 45, mensaje: "Ya ganaste una copa, consegu\u00ED la segunda.", botonNext: "VAMOS POR LA SEGUNDA" },
+            2: { tiempo: 40, mensaje: "Conseguiste la segunda, \u00A1felicidades! Ahora ve por la tercera.", botonNext: "VAMOS POR LA TERCERA" },
+            3: { tiempo: 35, mensaje: "\u00A1Felicidades! Ahora s\u00ED vamos por la cuarta.", botonNext: "VAMOS POR LA CUARTA" },
             4: { tiempo: 28, mensaje: "\u00A1Felicidades ganaste la cuarta!!" }
         };
 
@@ -672,6 +709,10 @@
         function manejarVictoriaNivel() {
             document.getElementById('zona-juego').style.display = 'none';
             
+            // REGLA SOLICITADA: Reproducir hinchada.mp3 en cualquier victoria (nivel intermedio o final)
+            sonidoHinchada.currentTime = 0;
+            sonidoHinchada.play().catch(e => console.log(e));
+            
             if (nivelActual === 4) {
                 inyectarCopasVisuales('copas-pantalla-final', 4);
                 document.getElementById('pantalla-victoria-final').style.display = 'flex';
@@ -682,11 +723,18 @@
                 
                 const datosNivel = configuracionNiveles[nivelActual];
                 document.getElementById('mensaje-progreso').innerText = datosNivel.mensaje;
+                
+                // Cambia el texto del botÛn intermedio din·micamente seg˙n el nivel ganado
+                document.getElementById('btn-siguiente-nivel').innerText = datosNivel.botonNext;
+                
                 document.getElementById('pantalla-progreso').style.display = 'flex';
             }
         }
 
         function avanzarSiguienteNivel() {
+            // Detener el sonido de la hinchada al pasar de nivel
+            sonidoHinchada.pause();
+            
             actualizarVitrinaHeader(nivelActual);
             
             document.getElementById('pantalla-progreso').style.display = 'none';
@@ -715,17 +763,6 @@
                     copaImg.className = "copa-bloqueada";
                 }
             }
-        }
-
-        function reiniciarTodoElJuego() {
-            const v = document.getElementById('video-ganador-fondo');
-            if(v) { v.pause(); }
-
-            document.getElementById('pantalla-victoria-final').style.display = 'none';
-            document.getElementById('pantalla-entrada').style.display = 'flex';
-            
-            nivelActual = 1;
-            actualizarVitrinaHeader(0);
         }
     </script>
 </body>
